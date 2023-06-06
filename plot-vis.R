@@ -77,6 +77,10 @@ png("param-scan.png", width=1000, height=2000)
 grid.arrange(g.1, g.2, g.3, g.4, nrow=2)
 dev.off()
 
+png("param-scan-2.png", width=600, height=600)
+grid.arrange(g.2)
+dev.off()
+
 ## focussed plots
 
 df = read.csv("zoom-scan.csv")
