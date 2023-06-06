@@ -10,8 +10,13 @@ df = rbind(df.0, df.1, df.2)
 df.long = melt(df, id.vars=c("t", "expt"))
 ggplot(df.long[df.long$variable %in% c("pro_1", "prooff_1", "rna_1", "p_1", "pp_1"),], 
        aes(x=t, y=value, color=factor(expt))) + geom_line() + 
-  scale_x_log10() +
-  facet_wrap(~variable, scales="free")
+  scale_x_log10() + facet_wrap(~variable, scales="free") + theme_classic()
+
+png("time-series.png", width=800, height=400)
+ggplot(df.long[df.long$variable %in% c("pro_1", "prooff_1", "rna_1", "p_1", "pp_1"),], 
+       aes(x=t, y=value, color=factor(expt))) + geom_line() + 
+  scale_x_log10() + facet_wrap(~variable, scales="free") + theme_classic()
+dev.off()
 
 # stochastic simulation runs
 
@@ -24,6 +29,12 @@ df.long = melt(df, id.vars=c("t", "expt"))
 ggplot(df.long[df.long$variable %in% c("p_1", "p_2"),], 
        aes(x=t, y=value, color=factor(variable))) + geom_line() + 
   facet_wrap(~expt, scales="free", ncol=1)
+
+png("stoch.png", width=800, height=400)
+ggplot(df.long[df.long$variable %in% c("p_1", "p_2"),], 
+       aes(x=t, y=value, color=factor(variable))) + geom_line() + 
+  facet_wrap(~expt, scales="free", ncol=1) + theme_classic()
+dev.off()
 
 sdf.0 = read.csv("gillespie-switches-0.csv"); sdf.0$expt = 0
 sdf.1 = read.csv("gillespie-switches-1.csv"); sdf.1$expt = 1
@@ -80,3 +91,6 @@ zg.2 = ggplot(df[df$param==1,], aes(x=ip1,y=ip2,xend=p1,yend=p2, color=factor(ro
   facet_grid(ATP~cd2) + coord_cartesian(xlim=c(0,30),ylim=c(0,30))
 
 grid.arrange(zg.1, zg.2, nrow=1)
+png("zoom-scan.png", width=800, height=400)
+grid.arrange(zg.1, zg.2, nrow=1)
+dev.off()
