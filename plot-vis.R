@@ -39,25 +39,30 @@ ggplot(sdf, aes(x = factor(expt), y=log10(dt))) + geom_boxplot()
 
 df = read.csv("param-scan.csv")
 
+var.names = c("gamma2", "gamma3", "gamma4", "cd1", "cd2", "ca1", "ca2", "lambda2", "lambda3")
+scale.names = c("x0.01", "x0.1", "x1", "x10", "x100")
+df$param.name = var.names[df$param+1]
+df$scale.name = scale.names[df$scale+1]
+
 g.1 = ggplot(df[df$n==1,], aes(x=ip1,y=ip2,xend=p1,yend=p2, color=factor(round(p2, digits=1)))) + 
   geom_segment(size=0.5) + 
   theme(legend.position = "none") + 
-  facet_grid(param~scale) + coord_cartesian(xlim=c(0,30),ylim=c(0,30))
+  facet_grid(param.name~scale.name) + coord_cartesian(xlim=c(0,30),ylim=c(0,30))
 g.2 = ggplot(df[df$n==2,], aes(x=ip1,y=ip2,xend=p1,yend=p2, color=factor(round(p2, digits=1)))) + 
   geom_segment(size=0.5) + 
   theme(legend.position = "none") + 
-  facet_grid(param~scale) + coord_cartesian(xlim=c(0,30),ylim=c(0,30))
+  facet_grid(param.name~scale.name) + coord_cartesian(xlim=c(0,30),ylim=c(0,30))
 g.3 = ggplot(df[df$n==3,], aes(x=ip1,y=ip2,xend=p1,yend=p2, color=factor(round(p2, digits=1)))) + 
   geom_segment(size=0.5) + 
   theme(legend.position = "none") + 
-  facet_grid(param~scale) + coord_cartesian(xlim=c(0,30),ylim=c(0,30))
+  facet_grid(param.name~scale.name) + coord_cartesian(xlim=c(0,30),ylim=c(0,30))
 g.4 = ggplot(df[df$n==4,], aes(x=ip1,y=ip2,xend=p1,yend=p2, color=factor(round(p2, digits=1)))) + 
   geom_segment(size=0.5) + 
   theme(legend.position = "none") + 
-  facet_grid(param~scale) + coord_cartesian(xlim=c(0,30),ylim=c(0,30))
+  facet_grid(param.name~scale.name) + coord_cartesian(xlim=c(0,30),ylim=c(0,30))
 
 grid.arrange(g.1, g.2, g.3, g.4, nrow=2)
-png("set-2023.png", width=1000, height=2000)
+png("param-scan.png", width=1000, height=2000)
 grid.arrange(g.1, g.2, g.3, g.4, nrow=2)
 dev.off()
 
