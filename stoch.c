@@ -78,6 +78,9 @@ int main(void)
       if(expt == 3) { lambda2 = 0.0067*2; lambda3 = 0.0474*2; }
 
       nswitch = 0;
+      for(i = 0; i < MAXSWITCH; i++)
+	switchlength[i] = 0;
+      
       // run simulation until time MAXT
       for(t = 0; t < MAXT; )
 	{

@@ -33,8 +33,8 @@ df.3 = read.csv("gillespie-series-3.csv"); df.3$expt = 3
 df = rbind(df.0, df.1, df.2, df.3)
 df.long = melt(df, id.vars=c("t", "expt"))
 df.long$Experiment = "Original"
-df.long$Experiment[df.long$expt==1] = "Scaled, ATP = 0.25"
-df.long$Experiment[df.long$expt==2] = "Scaled, ATP = 1"
+df.long$Experiment[df.long$expt==1] = "Scaled, ATP = 1"
+df.long$Experiment[df.long$expt==2] = "Scaled, ATP = 0.25"
 df.long$Experiment[df.long$expt==3] = "Scaled, ATP = 2"
 gill.traces = ggplot(df.long[df.long$variable %in% c("p_1", "p_2"),], 
        aes(x=t, y=value, color=factor(variable))) + geom_line() + labs(color="Protein") +
@@ -48,8 +48,8 @@ ggplot(df.long[df.long$variable %in% c("p_1", "p_2"),],
 dev.off()
 
 df$Experiment = "Original"
-df$Experiment[df$expt==1] = "Scaled, ATP = 0.25"
-df$Experiment[df$expt==2] = "Scaled, ATP = 1"
+df$Experiment[df$expt==1] = "Scaled, ATP = 1"
+df$Experiment[df$expt==2] = "Scaled, ATP = 0.25"
 df$Experiment[df$expt==3] = "Scaled, ATP = 2"
 gill.space = ggplot(df, aes(x=p_1, y=p_2, color=Experiment)) + geom_path(alpha=0.2) +
   facet_wrap(~Experiment, nrow=2) + theme_classic()  +
@@ -62,8 +62,8 @@ sdf.3 = read.csv("gillespie-switches-3.csv"); sdf.3$expt = 3
 sdf = rbind(sdf.0, sdf.1, sdf.2, sdf.3)
 
 sdf$Experiment = "Original"
-sdf$Experiment[sdf$expt==1] = "Scaled, ATP = 0.25"
-sdf$Experiment[sdf$expt==2] = "Scaled, ATP = 1"
+sdf$Experiment[sdf$expt==1] = "Scaled, ATP = 1"
+sdf$Experiment[sdf$expt==2] = "Scaled, ATP = 0.25"
 sdf$Experiment[sdf$expt==3] = "Scaled, ATP = 2"
 gill.switches = ggplot(sdf, aes(x=log10(dt), fill=Experiment)) + 
   geom_histogram(aes(y = ..density..) , alpha=0.4,position="identity") + 
