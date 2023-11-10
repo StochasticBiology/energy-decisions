@@ -1,5 +1,5 @@
 library(ggplot2)
-library(gridExtra)
+library(ggpubr)
 
 # read output from simulation code
 df = read.csv("hill.csv")
@@ -21,4 +21,6 @@ g.1 = ggplot(df) + geom_line(aes(x=x0/scale.1,y=p11), color="red") +
   geom_line(aes(x=x0/scale.4,y=p14), color="blue")  + xlim(0,2.5) +
   xlab("Scaled x0") + ylab("p1") + theme_light()
   
-grid.arrange(g.0, g.1, nrow=1)
+png("plot-hill.png", width=600*sf, height=200*sf, res=72*sf)
+ggarrange(g.0, g.1, labels = c("A", "B"), nrow=1, ncol=2)
+dev.off()
