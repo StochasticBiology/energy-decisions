@@ -15,7 +15,7 @@ The simulation code here explores the behaviour of deterministic (ODE) and stoch
 
 `stoch-scan.c` runs this stochastic version for the parameter sets in `param-scan.c`.
 
-All the above produce CSV files describing the time behaviour of system state (protein levels, RNA levels, and so on). `plot-vis.R` takes output from all the above and produces visualisations of the system behaviour.
+All the above produce CSV files describing the time behaviour of system state (protein levels, RNA levels, and so on). `plot-vis.R` takes output from most of the above and produces visualisations of the system behaviour. `param-matrix.c` and `stoch-scan.c` are output by `plot-vis-2.sh`.
 
 `hill.c` runs a simple simulation exploring the effects of different required oligomerisation states of a regulatory factor. `plot-hill.R` visualises the results for qualitative comparison with Hill function modelling.
  
