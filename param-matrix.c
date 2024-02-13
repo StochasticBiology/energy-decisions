@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
   // for(n = 1; n <= 4; n++)
   {
     
-    for(scale = 0; scale < 4; scale++)
+    for(scale = 0; scale <= 7; scale++)
       {
 	switch(scale)
 	  {
@@ -73,6 +73,10 @@ int main(int argc, char *argv[])
 	  case 1: s1 = 2; s2 = 0.5; break;
 	  case 2: s1 = 0.5; s2 = 2; break;
 	  case 3: s1 = 2; s2 = 2; break;
+	  case 4: s1 = 0.1; s2 = 0.1; break;
+	  case 5: s1 = 10; s2 = 0.1; break;
+	  case 6: s1 = 0.1; s2 = 10; break;
+	  case 7: s1 = 10; s2 = 10; break;
 	  }
 					
 	for(param = 0; param < 9; param++)
