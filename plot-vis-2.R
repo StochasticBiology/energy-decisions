@@ -76,8 +76,30 @@ gn.2.2 = ggplot(df[df$n==2 & df$s1==2 & df$s2 == 2,], aes(x=ip1,y=ip2,xend=p1,ye
   theme(legend.position = "none") + 
   facet_grid(param.name~param2.name)
 
+gn.3.3 = ggplot(df[df$n==2 & df$s1==0.1 & df$s2 == 0.1,], aes(x=ip1,y=ip2,xend=p1,yend=p2, color=factor(round(p2, digits=1)))) + 
+  geom_segment(size=0.5) + 
+  theme(legend.position = "none") + 
+  facet_grid(param.name~param2.name) 
+gn.3.4 = ggplot(df[df$n==2 & df$s1==0.1 & df$s2 == 10,], aes(x=ip1,y=ip2,xend=p1,yend=p2, color=factor(round(p2, digits=1)))) + 
+  geom_segment(size=0.5) + 
+  theme(legend.position = "none") + 
+  facet_grid(param.name~param2.name) 
+gn.4.3 = ggplot(df[df$n==2 & df$s1==10 & df$s2 == 0.1,], aes(x=ip1,y=ip2,xend=p1,yend=p2, color=factor(round(p2, digits=1)))) + 
+  geom_segment(size=0.5) + 
+  theme(legend.position = "none") + 
+  facet_grid(param.name~param2.name) 
+gn.4.4 = ggplot(df[df$n==2 & df$s1==10 & df$s2 == 10,], aes(x=ip1,y=ip2,xend=p1,yend=p2, color=factor(round(p2, digits=1)))) + 
+  geom_segment(size=0.5) + 
+  theme(legend.position = "none") + 
+  facet_grid(param.name~param2.name)
+
 # put together in file output
 sf = 2
 png("param-matrix-scan.png", width=1000*sf, height=1000*sf, res=72*sf)
 ggarrange(gn.1.1, gn.1.2, gn.2.1, gn.2.2, labels = c("A. x0.5,x0.5", "B. x0.5,x2", "C. x2,x0.5", "D. x2,x2"))
+dev.off()
+
+sf = 2
+png("param-matrix-scan-big.png", width=1000*sf, height=1000*sf, res=72*sf)
+ggarrange(gn.3.3, gn.3.4, gn.4.3, gn.4.4, labels = c("A. x0.1,x0.1", "B. x0.1,x10", "C. x10,x0.1", "D. x10,x10"))
 dev.off()
