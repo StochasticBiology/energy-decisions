@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
   // for(n = 1; n <= 4; n++)
   {
     
-    for(scale = 0; scale <= 7; scale++)
+    //    for(scale = 0; scale <= 7; scale++)
       {
 	switch(scale)
 	  {

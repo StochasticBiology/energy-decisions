@@ -26,3 +26,7 @@ gcc -o3 param-matrix.c -lm -o param-matrix.ce
 ./param-matrix.ce 2 1 > tmp-pm-1 &
 ./param-matrix.ce 2 2 > tmp-pm-2 &
 ./param-matrix.ce 2 3 > tmp-pm-3 &
+./param-matrix.ce 2 4 > tmp-pm-4 &
+./param-matrix.ce 2 5 > tmp-pm-5 &
+./param-matrix.ce 2 6 > tmp-pm-6 &
+./param-matrix.ce 2 7 > tmp-pm-7 &
