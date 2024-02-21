@@ -33,10 +33,11 @@ int main(void)
   double dt = 0.005;
   double eps = 1e-6;
   int converge;
-  int param, scale;
+  int param, scale, expt;
   int i;
   int n;
   double ATP;
+  double basegamma3;
   
   gamma2 = 0.00023;
   gamma3 = 0.00077;
@@ -50,104 +51,116 @@ int main(void)
   
   // open file for output
   fp = fopen("zoom-scan.csv", "w");
-  fprintf(fp, "n,param,scale,ATP,gamma2,gamma3,gamma4,cd1,cd2,ca1,ca2,lambda2,lambda3,ip1,ip2,p1,p2\n");
+  fprintf(fp, "expt,n,param,scale,ATP,gamma2,gamma3,gamma4,cd1,cd2,ca1,ca2,lambda2,lambda3,ip1,ip2,p1,p2\n");
   fclose(fp);
 
+  // sets cooperativity -- active component is the protein dimer
   n = 2;
-  
-  for(param = 0; param < 2; param++)
+
+  // loop through different experiments (which rates are affected by ATP)
+  for(expt = 0; expt <= 2; expt++)
     {
-      switch(param)
-	{
-	case 0: gamma3 = 0.00077/4; cd2 = 1.04; break;
-	case 1: gamma3 = 0.00077; cd2 = 0.01/4; break;
-	}
-      
-      for(scale = 0; scale <= 5; scale++)
+      // loop through different changes to default parameterisation
+      // we use a dummy "basegamma2" because both ATP and our scaling loop can change gamma2
+      for(param = 0; param < 2; param++)
 	{
 	  switch(param)
 	    {
-	    case 0: gamma3 *= 4; break;
-	    case 1: cd2 *= 2; break;
+	    case 0: basegamma3 = 0.00077/4; cd2 = 1.04; break;
+	    case 1: basegamma3 = 0.00077; cd2 = 0.01/4; break;
 	    }
 
-	  for(ATP = 0.25; ATP <= 2; ATP *= 2)
+	  // loop through fold changes to the parameter of choice
+	  for(scale = 0; scale <= 5; scale++)
 	    {
-	      lambda2 = 0.0067*ATP;
-	      lambda3 = 0.0474*ATP;
- 
-	      // loop through initial protein concentrations
-	      for(ip1 = 0; ip1 < 30; ip1 += 3)
+	      switch(param)
 		{
-		  for(ip2 = 0; ip2 < 30; ip2 += 3)
+		case 0: basegamma3 *= 4; break;
+		case 1: cd2 *= 2; break;
+		}
+
+	      gamma3 = basegamma3;
+	      // loop through ATP levels, influencing other rate parameters
+	      for(ATP = 0.25; ATP <= 2; ATP *= 2)
+		{
+		  switch(expt) {
+		  case 0: lambda2 = 0.0067*ATP; lambda3 = 0.0474*ATP; break;
+		  case 1: lambda2 = 0.0067*ATP; break;
+		  case 2: lambda3 = 0.0474*ATP; break;
+		  case 3: lambda2 = 0.0067*ATP; lambda3 = 0.0474*ATP; gamma3 = basegamma3*ATP; gamma4 = 0.00058; break;
+		  }
+ 
+		  // loop through initial protein concentrations
+		  for(ip1 = 0; ip1 < 30; ip1 += 3)
 		    {
-		      printf("%i,%i,%i,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e\n", n,param,scale,ATP,gamma2,gamma3,gamma4,cd1,cd2,ca1,ca2,lambda2,lambda3, ip1, ip2);
-
-		      // initialise system
-		      p_1 = ip1; p_2 = ip2;
-		      pro_1 = 1; pro_2 = 1; z_1 = 1; z_2 = 1;
-		      rna_1 = rna_2 = prooff_1 = prooff_2 = pp_1 = pp_2 = ppp_1 = ppp_2 = pppp_1 = pppp_2 = 0;
-		      converge = 0;
-
-		      // simple euler solver
-		      for(t = 0; converge < 500./dt; t += dt)
+		      for(ip2 = 0; ip2 < 30; ip2 += 3)
 			{
-			  // time derivatives from Rajneesh's doc
-			  drna_1dt   = lambda2*pro_1*z_1-gamma2*rna_1;
-			  drna_2dt   = lambda2*pro_2*z_2-gamma2*rna_2;
+			  printf("%i,%i,%i,%i,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e\n", expt,n,param,scale,ATP,gamma2,gamma3,gamma4,cd1,cd2,ca1,ca2,lambda2,lambda3, ip1, ip2);
 
-			  //           translate     dimer         dedimer    degrade
-			  dp_1dt     = lambda3*rna_1-2*ca1*p_1*p_1+2*cd1*pp_1-gamma3*p_1;
-			  dp_2dt     = lambda3*rna_2-2*ca1*p_2*p_2+2*cd1*pp_2-gamma3*p_2;
-			  //           DNAunbind    DNAbind
-			  dpro_1dt   = cd2*prooff_1-ca2*pro_1*pp_2;            
-			  dpro_2dt   = cd2*prooff_2-ca2*pro_2*pp_1;
-			  //             DNAunbind    DNAbind
-			  dprooff_1dt = -cd2*prooff_1+ca2*pro_1*pp_2;
-			  dprooff_2dt = -cd2*prooff_2+ca2*pro_2*pp_1;
-			  //           dimer       dedimer  DNAbind        degrade     DNAunbind
-			  dpp_1dt    = ca1*p_1*p_1-cd1*pp_1-ca2*pp_1*pro_2-gamma4*pp_1+cd2*prooff_2;
-			  dpp_2dt    = ca1*p_2*p_2-cd1*pp_2-ca2*pp_2*pro_1-gamma4*pp_2+cd2*prooff_1;
-			  dppp_1dt    = 0;
-			  dppp_2dt    = 0;
-			  dpppp_1dt    = 0;
-			  dpppp_2dt    = 0;
+			  // initialise system
+			  p_1 = ip1; p_2 = ip2;
+			  pro_1 = 1; pro_2 = 1; z_1 = 1; z_2 = 1;
+			  rna_1 = rna_2 = prooff_1 = prooff_2 = pp_1 = pp_2 = ppp_1 = ppp_2 = pppp_1 = pppp_2 = 0;
+			  converge = 0;
+
+			  // simple euler solver
+			  for(t = 0; converge < 500./dt; t += dt)
+			    {
+			      // time derivatives from Rajneesh's doc
+			      drna_1dt   = lambda2*pro_1*z_1-gamma2*rna_1;
+			      drna_2dt   = lambda2*pro_2*z_2-gamma2*rna_2;
+
+			      //           translate     dimer         dedimer    degrade
+			      dp_1dt     = lambda3*rna_1-2*ca1*p_1*p_1+2*cd1*pp_1-gamma3*p_1;
+			      dp_2dt     = lambda3*rna_2-2*ca1*p_2*p_2+2*cd1*pp_2-gamma3*p_2;
+			      //           DNAunbind    DNAbind
+			      dpro_1dt   = cd2*prooff_1-ca2*pro_1*pp_2;            
+			      dpro_2dt   = cd2*prooff_2-ca2*pro_2*pp_1;
+			      //             DNAunbind    DNAbind
+			      dprooff_1dt = -cd2*prooff_1+ca2*pro_1*pp_2;
+			      dprooff_2dt = -cd2*prooff_2+ca2*pro_2*pp_1;
+			      //           dimer       dedimer  DNAbind        degrade     DNAunbind
+			      dpp_1dt    = ca1*p_1*p_1-cd1*pp_1-ca2*pp_1*pro_2-gamma4*pp_1+cd2*prooff_2;
+			      dpp_2dt    = ca1*p_2*p_2-cd1*pp_2-ca2*pp_2*pro_1-gamma4*pp_2+cd2*prooff_1;
+			      dppp_1dt    = 0;
+			      dppp_2dt    = 0;
+			      dpppp_1dt    = 0;
+			      dpppp_2dt    = 0;
 
 		      
-			  // test for convergence
-			  if(!(dpro_1dt > eps*pro_1 || dpro_2dt > eps*pro_2 || dprooff_1dt > eps*prooff_1 || dprooff_2dt > eps*prooff_2 || drna_1dt > eps*rna_1 || drna_2dt > eps*rna_2 || dp_1dt > eps*p_1 || dp_2dt > eps*p_2 || dpp_1dt > eps*pp_1 || dpp_2dt > eps*pp_2 || dppp_1dt > eps*ppp_1 || dppp_2dt > eps*ppp_2 || dpppp_1dt > eps*pppp_1 || dpppp_2dt > eps*pppp_2))
-			    converge++;
-			  else converge = 0;
+			      // test for convergence
+			      if(!(dpro_1dt > eps*pro_1 || dpro_2dt > eps*pro_2 || dprooff_1dt > eps*prooff_1 || dprooff_2dt > eps*prooff_2 || drna_1dt > eps*rna_1 || drna_2dt > eps*rna_2 || dp_1dt > eps*p_1 || dp_2dt > eps*p_2 || dpp_1dt > eps*pp_1 || dpp_2dt > eps*pp_2 || dppp_1dt > eps*ppp_1 || dppp_2dt > eps*ppp_2 || dpppp_1dt > eps*pppp_1 || dpppp_2dt > eps*pppp_2))
+				converge++;
+			      else converge = 0;
 
-			  // update state of system
-			  pro_1      += dt*dpro_1dt;
-			  pro_2      += dt*dpro_2dt;
-			  prooff_1    += dt*dprooff_1dt;
-			  prooff_2    += dt*dprooff_2dt;
-			  rna_1      += dt*drna_1dt;
-			  rna_2      += dt*drna_2dt;
-			  p_1        += dt*dp_1dt;
-			  p_2        += dt*dp_2dt;
-			  pp_1       += dt*dpp_1dt;
-			  pp_2       += dt*dpp_2dt;
-			  ppp_1       += dt*dppp_1dt;
-			  ppp_2       += dt*dppp_2dt;
-			  pppp_1       += dt*dpppp_1dt;
-			  pppp_2       += dt*dpppp_2dt;
+			      // update state of system
+			      pro_1      += dt*dpro_1dt;
+			      pro_2      += dt*dpro_2dt;
+			      prooff_1    += dt*dprooff_1dt;
+			      prooff_2    += dt*dprooff_2dt;
+			      rna_1      += dt*drna_1dt;
+			      rna_2      += dt*drna_2dt;
+			      p_1        += dt*dp_1dt;
+			      p_2        += dt*dp_2dt;
+			      pp_1       += dt*dpp_1dt;
+			      pp_2       += dt*dpp_2dt;
+			      ppp_1       += dt*dppp_1dt;
+			      ppp_2       += dt*dppp_2dt;
+			      pppp_1       += dt*dpppp_1dt;
+			      pppp_2       += dt*dpppp_2dt;
+			    }
+
+			  // output start and end points for this sim
+			  fp = fopen("zoom-scan.csv", "a");
+			  fprintf(fp, "%i,%i,%i,%i,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e\n", expt, n,param,scale,ATP,gamma2,gamma3,gamma4,cd1,cd2,ca1,ca2,lambda2,lambda3, ip1, ip2, p_1, p_2);
+			  fclose(fp);
 			}
-
-		      // output start and end points for this sim
-		      fp = fopen("zoom-scan.csv", "a");
-		      fprintf(fp, "%i,%i,%i,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e\n", n,param,scale,ATP,gamma2,gamma3,gamma4,cd1,cd2,ca1,ca2,lambda2,lambda3, ip1, ip2, p_1, p_2);
-		      fclose(fp);
 		    }
 		}
-	    }
 
+	    }
 	}
     }
-
-    
   
   return 0;
 }
