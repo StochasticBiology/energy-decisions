@@ -109,7 +109,7 @@ int main(void)
 		      // initialise system
 		      p_1 = ip1; p_2 = ip2;
 		      pro_1 = 1; pro_2 = 1; z_1 = 1; z_2 = 1;
-		      rna_1 = rna_2 = prooff_1 = prooff_2 = pp_1 = pp_2 = ppp_1 = ppp_2 = pppp_1 = pppp_2 = 0;
+		      rna_1 = rna_2 = prooff_1 = prooff_2 = propoff_1 = propoff_2 = pp_1 = pp_2 = ppp_1 = ppp_2 = pppp_1 = pppp_2 = 0;
 		      converge = 0;
 
 		      // simple euler solver
