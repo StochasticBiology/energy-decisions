@@ -58,7 +58,7 @@ int main(void)
   
   // open file for output
   fp = fopen("param-scan-variants.csv", "w");
-  fprintf(fp, "n,param,scale,gamma2,gamma3,gamma4,cd1,cd2,ca1,ca2,lambda2,lambda3,ip1,ip2,p1,p2\n");
+  fprintf(fp, "n,param,scale,gamma2,gamma3,gamma4,cd1,cd2,ca1,ca2,lambda2,lambda3,lambda2p,ca1p,cd1p,ca3,cd3,ip1,ip2,p1,p2\n");
   fclose(fp);
 
   /*        sprintf(fstr, "test-series.csv");
@@ -69,23 +69,23 @@ int main(void)
       
   for(param = 0; param < 9; param++)
     {
-      switch(param)
+           switch(param)
 	{
-	case 0: gamma2 /= 1000; break;
-	case 1: gamma3 /= 1000; break;
-	case 2: gamma4 /= 1000; break;
-	case 3: cd1 /= 1000; break;
-	case 4: cd2 /= 1000; break;
-	case 5: ca1 /= 1000; break;
-	case 6: ca2 /= 1000; break;
-	case 7: lambda2 /= 1000; break;
-	case 8: lambda3 /= 1000; break;
+	case 0: gamma2 /= 100; break;
+	case 1: gamma3 /= 100; break;
+	case 2: gamma4 /= 100; break;
+	case 3: cd1 /= 100; break;
+	case 4: cd2 /= 100; break;
+	case 5: ca1 /= 100; break;
+	case 6: ca2 /= 100; break;
+	case 7: lambda2 /= 100; break;
+	case 8: lambda3 /= 100; break;
 	}
       
-      for(scale = 0; scale <= 4; scale++)
+            for(scale = 1; scale <= 3; scale++)
 	{
 	  // 0 /100; 1 /10; 2 1; 3 *10; 4 *100
-	  switch(param)
+	  	  switch(param)
 	    {
 	    case 0: gamma2 *= 10; break;
 	    case 1: gamma3 *= 10; break;
@@ -130,7 +130,7 @@ int main(void)
 		      if(n == 2)
 			{
 			  //           translate     dimer         dedimer    degrade        DNA unbind m  DNA bind m     DNA dedimer   DNA dimer 
-			    dp_1dt     = lambda3*rna_1-2*ca1*p_1*p_1+2*cd1*pp_1-gamma3*p_1   + cd3*propoff_2-ca3*pro_2*p_1+cd1p*prooff_2-ca1p*propoff_2*p_1;
+			  dp_1dt     = lambda3*rna_1-2*ca1*p_1*p_1+2*cd1*pp_1-gamma3*p_1   + cd3*propoff_2-ca3*pro_2*p_1+cd1p*prooff_2-ca1p*propoff_2*p_1;
 			  dp_2dt     = lambda3*rna_2-2*ca1*p_2*p_2+2*cd1*pp_2-gamma3*p_2   + cd3*propoff_1-ca3*pro_1*p_2+cd1p*prooff_1-ca1p*propoff_1*p_2;
 			  //           DNAunbind    DNAbind           DNA unbind m  DNA bind m
 			  dpro_1dt   = cd2*prooff_1-ca2*pro_1*pp_2  + cd3*propoff_1-ca3*pro_1*p_2;            
@@ -188,6 +188,7 @@ int main(void)
 	  
 		  // output start and end points for this sim
 		  fp = fopen("param-scan-variants.csv", "a");
+		  //		  fprintf(fp, "n,param,scale,gamma2,gamma3,gamma4,cd1,cd2,ca1,ca2,lambda2,lambda3,lambda2p,ca1p,cd1p,ca3,cd3,ip1,ip2,p1,p2\n");
 		  fprintf(fp, "%i,%i,%i,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e,%e\n", n,param,scale,gamma2,gamma3,gamma4,cd1,cd2,ca1,ca2,lambda2,lambda3, lambda2p,ca1p,cd1p,ca3,cd3, ip1, ip2, p_1, p_2);
 		  fclose(fp);
 		}
@@ -195,15 +196,15 @@ int main(void)
 	}
       switch(param)
 	{
-	case 0: gamma2 /= 100; break;
-	case 1: gamma3 /= 100; break;
-	case 2: gamma4 /= 100; break;
-	case 3: cd1 /= 100; break;
-	case 4: cd2 /= 100; break;
-	case 5: ca1 /= 100; break;
-	case 6: ca2 /= 100; break;
-	case 7: lambda2 /= 100; break;
-	case 8: lambda3 /= 100; break;
+	case 0: gamma2 /= 10; break;
+	case 1: gamma3 /= 10; break;
+	case 2: gamma4 /= 10; break;
+	case 3: cd1 /= 10; break;
+	case 4: cd2 /= 10; break;
+	case 5: ca1 /= 10; break;
+	case 6: ca2 /= 10; break;
+	case 7: lambda2 /= 10; break;
+	case 8: lambda3 /= 10; break;
 	}
 
     }
