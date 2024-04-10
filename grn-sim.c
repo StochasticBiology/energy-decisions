@@ -465,7 +465,8 @@ int main(int argc, char *argv[])
       initialiseFile("grn-sim-5.csv", 0);
   
       n = 2;
-
+      P.gamma3 *= 10;
+      
       for(ICs = 0; ICs <= 3; ICs++)
 	{
 	  for(P.ATP = 0.5; P.ATP <= 2.1; P.ATP *= 2)
@@ -486,7 +487,8 @@ int main(int argc, char *argv[])
       initialiseFile("grn-sim-6c.csv", 0);
   
       n = 2;
-
+      // several instances here need finer timesteps
+      dt = 0.005;
       P.gamma4 /= 4;
       for(P.scale = 0; P.scale <= 4; P.scale++)
 	{
