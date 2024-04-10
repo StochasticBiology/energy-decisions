@@ -19,7 +19,7 @@ IC.labels = factor(IC.labels, levels=IC.labels)
 
 df.0 = read.csv("grn-sim-0.csv")
 
-g.0.1 = ggplot(df.0, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() + theme(legend.position="none") +
+g.0.1 = ggplot(df.0, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() + theme(legend.position="none") +
   facet_grid(~method.labels[euler+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
 
 df.0t = read.csv("grn-sim-0-t.csv")
@@ -38,19 +38,19 @@ dev.off()
 ### manuscript: Fig 2 (n = 2), Supp Fig XXX (all n)
 
 df.1.1 = read.csv("grn-sim-1.1.csv")
-g.1.1 = ggplot(df.1.1, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
+g.1.1 = ggplot(df.1.1, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
   theme(legend.position="none") + facet_grid(param.labels[param+1] ~ scale.labels[scale+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
 
 df.1.2 = read.csv("grn-sim-1.2.csv")
-g.1.2 = ggplot(df.1.2, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
+g.1.2 = ggplot(df.1.2, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
   theme(legend.position="none") + facet_grid(param.labels[param+1] ~ scale.labels[scale+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
 
 df.1.3 = read.csv("grn-sim-1.3.csv")
-g.1.3 = ggplot(df.1.3, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
+g.1.3 = ggplot(df.1.3, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
   theme(legend.position="none") + facet_grid(param.labels[param+1] ~ scale.labels[scale+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
  
 df.1.4 = read.csv("grn-sim-1.4.csv")
-g.1.4 = ggplot(df.1.4, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
+g.1.4 = ggplot(df.1.4, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
   theme(legend.position="none") + facet_grid(param.labels[param+1] ~ scale.labels[scale+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
 
 png("expt-1.1.png", width=600*sf, height=600*sf, res=72*sf)
@@ -65,7 +65,7 @@ dev.off()
 ### manuscript: Supp Fig XXX 
 
 df.2.2 = read.csv("grn-sim-2.2.csv")
-g.2.2 = ggplot(df.2.2, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
+g.2.2 = ggplot(df.2.2, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
   theme(legend.position="none") + facet_grid(param.labels[param+1] ~ scale.labels[scale+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
 
 png("expt-2.png", width=600*sf, height=600*sf, res=72*sf)
@@ -76,14 +76,14 @@ dev.off()
 ### manuscript: Fig 3A
 
 df.3 = read.csv("grn-sim-3.csv")
-g.3 = ggplot(df.3, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
+g.3 = ggplot(df.3, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
   theme(legend.position="none") + facet_grid(ATP ~ gamma3) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
 
 ############ Experiment 4 -- ATP x gamma3 influence
 ### manuscript: Fig 3B
 
 df.4 = read.csv("grn-sim-4.csv")
-g.4 = ggplot(df.4, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
+g.4 = ggplot(df.4, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
   theme(legend.position="none") + facet_grid(ATP ~ cd2) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
 
 png("expt-4.png", width=800*sf, height=400*sf, res=72*sf)
@@ -94,7 +94,7 @@ dev.off()
 ### manuscript: Supp Fig XXXX
 
 df.5 = read.csv("grn-sim-5.csv")
-g.5 = ggplot(df.5, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
+g.5 = ggplot(df.5, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
   theme(legend.position="none") + facet_grid(ATP ~ IC.labels[ICs+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
 
 png("expt-5.png", width=600*sf, height=300*sf, res=72*sf)
@@ -108,15 +108,15 @@ df.6a = read.csv("grn-sim-6a.csv")
 df.6b = read.csv("grn-sim-6b.csv")
 df.6c = read.csv("grn-sim-6c.csv")
 
-g.6a = ggplot(df.6a, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
+g.6a = ggplot(df.6a, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
   theme(legend.position="none") + facet_grid(ATP ~ gamma3) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
-g.6b = ggplot(df.6b, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
+g.6b = ggplot(df.6b, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
   theme(legend.position="none") + facet_grid(ATP ~ gamma3) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
-g.6c = ggplot(df.6c, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
+g.6c = ggplot(df.6c, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
   theme(legend.position="none") + facet_grid(ATP ~ gamma3) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
 
-png("expt-6.png", width=800*sf, height=300*sf, res=72*sf)
-print( ggarrange(g.6a, g.6b, g.6c, labels=c("A", "B", "C")) )
+png("expt-6.png", width=900*sf, height=300*sf, res=72*sf)
+print( ggarrange(g.6a, g.6b, g.6c, nrow=1, ncol=3, labels=c("A", "B", "C")) )
 dev.off()
 
 ############ Experiment 7 -- bifurcation plots
@@ -124,8 +124,15 @@ dev.off()
 
 df.7 = read.csv("grn-sim-7.csv")
 
+#ggplot(df.1.1, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
+#  theme(legend.position="none") + facet_grid(param.labels[param+1] ~ scale.labels[scale+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
+
 sub.7.1 = df.7[df.7$gamma3 == max(df.7$gamma3),]
 sub.7.2 = df.7[df.7$gamma3 != max(df.7$gamma3),]
+
+#ggplot(sub.7.1, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
+#  theme(legend.position="none") + facet_wrap(~ATP) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
+
 g.7.1 = ggplot(sub.7.1, aes(x=ATP, y=p1)) + geom_point()
 g.7.2 = ggplot(sub.7.2, aes(x=ATP, y=p1)) + geom_point()
 
@@ -139,23 +146,23 @@ dev.off()
 df.8 = read.csv("grn-sim-8.csv", header=FALSE)
 colnames(df.8) <- colnames(df.7)
 
-g.8.1.1 = ggplot(df.8[df.8$scale==0,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
-  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
-g.8.1.2 = ggplot(df.8[df.8$scale==1,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
-  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
-g.8.1.3 = ggplot(df.8[df.8$scale==2,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
-  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
-g.8.1.4 = ggplot(df.8[df.8$scale==3,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
-  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
+g.8.1.1 = ggplot(df.8[df.8$scale==0,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
+  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30)) + theme(legend.position="none")
+g.8.1.2 = ggplot(df.8[df.8$scale==1,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
+  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30)) + theme(legend.position="none")
+g.8.1.3 = ggplot(df.8[df.8$scale==2,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
+  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30)) + theme(legend.position="none")
+g.8.1.4 = ggplot(df.8[df.8$scale==3,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
+  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30)) + theme(legend.position="none")
 
-g.8.2.1 = ggplot(df.8[df.8$scale==4,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
-  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
-g.8.2.2 = ggplot(df.8[df.8$scale==5,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
-  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
-g.8.2.3 = ggplot(df.8[df.8$scale==6,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
-  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
-g.8.2.4 = ggplot(df.8[df.8$scale==7,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=p1)) + geom_segment() +
-  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
+g.8.2.1 = ggplot(df.8[df.8$scale==4,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
+  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30)) + theme(legend.position="none")
+g.8.2.2 = ggplot(df.8[df.8$scale==5,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
+  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30)) + theme(legend.position="none")
+g.8.2.3 = ggplot(df.8[df.8$scale==6,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
+  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30)) + theme(legend.position="none")
+g.8.2.4 = ggplot(df.8[df.8$scale==7,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
+  facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30)) + theme(legend.position="none")
 
 png("expt-8.1.png", width=1200*sf, height=900*sf, res=72*sf)
 print( ggarrange(g.8.1.1, g.8.1.2, g.8.1.3, g.8.1.4, labels=c("A", "B", "C", "D")) )

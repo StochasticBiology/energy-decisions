@@ -390,8 +390,8 @@ int main(int argc, char *argv[])
       
       sprintf(fname, "grn-sim-%i.%i.csv", expt, n);
       initialiseFile(fname, 0);
-  
-      for(P.param = 0; P.param < 9; P.param++)
+
+      for(P.param = 0; P.param <= 8; P.param++)
 	{
 	  switch(P.param)
 	    {
@@ -423,7 +423,7 @@ int main(int argc, char *argv[])
 		}
 		  
 	      // the particular case of 100x ca2 needs a smaller timestep for stability
-	      if(P.param == 6 && P.scale == 4) dt = 0.0001;
+	      if(P.param == 6 && P.scale == 4) dt = 0.001;
 	      else dt = 0.005;
 
 	      if(expt == 1) simulate(P, 1, 1, n, 0, fname, "", 0, dt);
@@ -508,13 +508,16 @@ int main(int argc, char *argv[])
       n = 2;
       // several instances here need finer timesteps
       dt = 0.005;
-      P.gamma4 /= 4;
+      double tgamma3 = P.gamma3/4;
+
       for(P.scale = 0; P.scale <= 4; P.scale++)
 	{
-	  P.gamma3 *= 4;
+	 tgamma3 *= 4;
 
       	  for(P.ATP = 0.5; P.ATP <= 2.1; P.ATP *= 2)
 	    {
+	      P.gamma3 = tgamma3;
+	      
 	      P.lambda2 *= P.ATP;
 	      simulate(P, 1, 1, n, 0, "grn-sim-6a.csv", "", 0, dt);
 	      P.lambda2 /= P.ATP;
