@@ -432,12 +432,16 @@ int main(int argc, char *argv[])
 
       if(expt == 3) P.gamma3 = 0.00077/4;
       if(expt == 4) P.cd2 = 0.005/2;
-      for(P.scale = 0; P.scale <= 4; P.scale++)
+      for(P.scale = 0; P.scale <= 5; P.scale++)
 	{
 	  if(expt == 3) P.gamma3 *= 4;
 	  if(expt == 4) P.cd2 *= 2;
-	  for(P.ATP = 0.5; P.ATP <= 2.1; P.ATP *= 2)
+	  for(P.ATP = 0.25; P.ATP <= 2.1; P.ATP *= 2)
 	    {
+	      // some cases need a smaller timestep for stability
+	      if(P.ATP > 2 || P.cd2 > 0.02) dt = 0.005;
+	      else dt = 0.01;
+	      
 	      P.lambda2 *= P.ATP; P.lambda3 *= P.ATP;
 	      if(expt == 3) simulate(P, 1, 1, n, 0, "grn-sim-3.csv", "", 0, dt);
 	      if(expt == 4) simulate(P, 1, 1, n, 0, "grn-sim-4.csv", "", 0, dt);
