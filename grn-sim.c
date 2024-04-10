@@ -68,6 +68,8 @@ State addState(State S1, State S2)
   nS.ppp_2 = S1.ppp_2+S2.ppp_2;
   nS.pppp_1 = S1.pppp_1+S2.pppp_1;
   nS.pppp_2 = S1.pppp_2+S2.pppp_2;
+  nS.propoff_1 = S1.propoff_1+S2.propoff_1;
+  nS.propoff_2 = S1.propoff_2+S2.propoff_2;
   nS.z_1 = S1.z_1+S2.z_1;
   nS.z_2 = S1.z_2+S2.z_2;
   
@@ -92,6 +94,8 @@ State scaleState(State S1, double alpha)
   nS.ppp_2 = S1.ppp_2*alpha;
   nS.pppp_1 = S1.pppp_1*alpha;
   nS.pppp_2 = S1.pppp_2*alpha;
+  nS.propoff_1 = S1.propoff_1*alpha;
+  nS.propoff_2 = S1.propoff_2*alpha;
   nS.z_1 = S1.z_1*alpha;
   nS.z_2 = S1.z_2*alpha;
   
@@ -242,11 +246,24 @@ void initialState(State *S, double ip1, double ip2, int ICs)
   }
     
 }
-       
+
+double myabs(double x)
+{
+  if(x < 0) return -x;
+  return x;
+}
+
 // test for convergence in terms of proportional state change
 int convergence(State S, State dS, double eps)
 {
-  if(!(dS.pro_1 > eps*S.pro_1 || dS.pro_2 > eps*S.pro_2 || dS.prooff_1 > eps*S.prooff_1 || dS.prooff_2 > eps*S.prooff_2 || dS.rna_1 > eps*S.rna_1 || dS.rna_2 > eps*S.rna_2 || dS.p_1 > eps*S.p_1 || dS.p_2 > eps*S.p_2 || dS.pp_1 > eps*S.pp_1 || dS.pp_2 > eps*S.pp_2 || dS.ppp_1 > eps*S.ppp_1 || dS.ppp_2 > eps*S.ppp_2 || dS.pppp_1 > eps*S.pppp_1 || dS.pppp_2 > eps*S.pppp_2))
+  if((myabs(dS.pro_1) > myabs(eps*S.pro_1) || myabs(dS.pro_2) > myabs(eps*S.pro_2) ||
+      myabs(dS.prooff_1) > myabs(eps*S.prooff_1) || myabs(dS.prooff_2) > myabs(eps*S.prooff_2) ||
+      myabs(dS.rna_1) > myabs(eps*S.rna_1) || myabs(dS.rna_2) > myabs(eps*S.rna_2) ||
+      myabs(dS.p_1) > myabs(eps*S.p_1) || myabs(dS.p_2) > myabs(eps*S.p_2) ||
+      myabs(dS.pp_1) > myabs(eps*S.pp_1) || myabs(dS.pp_2) > myabs(eps*S.pp_2) ||
+      myabs(dS.ppp_1) > myabs(eps*S.ppp_1) || myabs(dS.ppp_2) > myabs(eps*S.ppp_2) ||
+      myabs(dS.pppp_1) > myabs(eps*S.pppp_1) || myabs(dS.pppp_2) > myabs(eps*S.pppp_2) ||
+      myabs(dS.propoff_1) > myabs(eps*S.propoff_1) || myabs(dS.propoff_2) > myabs(eps*S.propoff_2)))
     return 0;
   else return 1;
 }
@@ -271,7 +288,7 @@ void simulate(Params P, int model, int euler, int n, int ICs, char *filename, ch
 	  converge = 0;
 	  initialState(&S, ip1, ip2, ICs);
 
-	  for(t = 0; converge < 500./dt; t += dt)
+	  for(t = 0; converge < 500; t += dt)
 	    {
 	      if(!euler)
 		{
@@ -290,9 +307,10 @@ void simulate(Params P, int model, int euler, int n, int ICs, char *filename, ch
 		  dS = scaleState(k1, dt);
 		}
 	      
-	      if(!convergence(S, dS, eps*dt))
+	      if(convergence(S, dS, eps*dt))
 		converge++;
-	      else converge = 0;
+	      else
+		converge = 0;
 		      
 	      S = addState(S, dS);
 		    
