@@ -101,23 +101,26 @@ State scaleState(State S1, double alpha)
 // time derivatives for various model structures
 void derivatives(int model, int n, Params P, State S, State *dS)
 {
-  dS->rna_1   = P.lambda2*S.pro_1*S.z_1-P.gamma2*S.rna_1;
-  dS->rna_2   = P.lambda2*S.pro_2*S.z_2-P.gamma2*S.rna_2;
+  // constitutive expression stays constant
   dS->z_1 = dS->z_2 = 0;
 
   if(model == 1)
     {
+      //            transcribe              degrade
+      dS->rna_1   = P.lambda2*S.pro_1*S.z_1 -P.gamma2*S.rna_1;
+      dS->rna_2   = P.lambda2*S.pro_2*S.z_2 -P.gamma2*S.rna_2;
+
       if(n == 1)
 	{
-	  //           translate     degrade    DNAbind       DNAunbind
-	  dS->p_1     = P.lambda3*S.rna_1-P.gamma3*S.p_1-P.ca2*S.pro_2*S.p_1+P.cd2*S.prooff_2;
-	  dS->p_2     = P.lambda3*S.rna_2-P.gamma3*S.p_2-P.ca2*S.pro_1*S.p_2+P.cd2*S.prooff_1;
-	  //           DNAunbind    DNAbind
-	  dS->pro_1   = P.cd2*S.prooff_1-P.ca2*S.pro_1*S.p_2;            
-	  dS->pro_2   = P.cd2*S.prooff_2-P.ca2*S.pro_2*S.p_1;
-	  //             DNAunbind    DNAbind
-	  dS->prooff_1 = -P.cd2*S.prooff_1+P.ca2*S.pro_1*S.p_2;
-	  dS->prooff_2 = -P.cd2*S.prooff_2+P.ca2*S.pro_2*S.p_1;
+	  //           translate          degrade         DNAbind              DNAunbind
+	  dS->p_1     = P.lambda3*S.rna_1 -P.gamma3*S.p_1 -P.ca2*S.pro_2*S.p_1 +P.cd2*S.prooff_2;
+	  dS->p_2     = P.lambda3*S.rna_2 -P.gamma3*S.p_2 -P.ca2*S.pro_1*S.p_2 +P.cd2*S.prooff_1;
+	  //           DNAunbind         DNAbind
+	  dS->pro_1   = P.cd2*S.prooff_1 -P.ca2*S.pro_1*S.p_2;            
+	  dS->pro_2   = P.cd2*S.prooff_2 -P.ca2*S.pro_2*S.p_1;
+	  //             DNAunbind         DNAbind
+	  dS->prooff_1 = -P.cd2*S.prooff_1 +P.ca2*S.pro_1*S.p_2;
+	  dS->prooff_2 = -P.cd2*S.prooff_2 +P.ca2*S.pro_2*S.p_1;
 	  dS->pp_1    = 0;
 	  dS->pp_2    = 0;
 	  dS->ppp_1    = 0;
@@ -128,18 +131,18 @@ void derivatives(int model, int n, Params P, State S, State *dS)
 		      
       if(n == 2)
 	{
-	  //           translate     dimer         dedimer    degrade
-	  dS->p_1     = P.lambda3*S.rna_1-2*P.ca1*S.p_1*S.p_1+2*P.cd1*S.pp_1-P.gamma3*S.p_1;
-	  dS->p_2     = P.lambda3*S.rna_2-2*P.ca1*S.p_2*S.p_2+2*P.cd1*S.pp_2-P.gamma3*S.p_2;
-	  //           DNAunbind    DNAbind
-	  dS->pro_1   = P.cd2*S.prooff_1-P.ca2*S.pro_1*S.pp_2;            
-	  dS->pro_2   = P.cd2*S.prooff_2-P.ca2*S.pro_2*S.pp_1;
-	  //             DNAunbind    DNAbind
-	  dS->prooff_1 = -P.cd2*S.prooff_1+P.ca2*S.pro_1*S.pp_2;
-	  dS->prooff_2 = -P.cd2*S.prooff_2+P.ca2*S.pro_2*S.pp_1;
-	  //           dimer       dedimer  DNAbind        degrade     DNAunbind
-	  dS->pp_1    = P.ca1*S.p_1*S.p_1-P.cd1*S.pp_1-P.ca2*S.pp_1*S.pro_2-P.gamma4*S.pp_1+P.cd2*S.prooff_2;
-	  dS->pp_2    = P.ca1*S.p_2*S.p_2-P.cd1*S.pp_2-P.ca2*S.pp_2*S.pro_1-P.gamma4*S.pp_2+P.cd2*S.prooff_1;
+	  //           translate          dimer                dedimer         degrade
+	  dS->p_1     = P.lambda3*S.rna_1 -2*P.ca1*S.p_1*S.p_1 +2*P.cd1*S.pp_1 -P.gamma3*S.p_1;
+	  dS->p_2     = P.lambda3*S.rna_2 -2*P.ca1*S.p_2*S.p_2 +2*P.cd1*S.pp_2 -P.gamma3*S.p_2;
+	  //           DNAunbind         DNAbind
+	  dS->pro_1   = P.cd2*S.prooff_1 -P.ca2*S.pro_1*S.pp_2;            
+	  dS->pro_2   = P.cd2*S.prooff_2 -P.ca2*S.pro_2*S.pp_1;
+	  //             DNAunbind         DNAbind
+	  dS->prooff_1 = -P.cd2*S.prooff_1 +P.ca2*S.pro_1*S.pp_2;
+	  dS->prooff_2 = -P.cd2*S.prooff_2 +P.ca2*S.pro_2*S.pp_1;
+	  //           dimer              dedimer       DNAbind               degrade          DNAunbind
+	  dS->pp_1    = P.ca1*S.p_1*S.p_1 -P.cd1*S.pp_1 -P.ca2*S.pp_1*S.pro_2 -P.gamma4*S.pp_1 +P.cd2*S.prooff_2;
+	  dS->pp_2    = P.ca1*S.p_2*S.p_2 -P.cd1*S.pp_2 -P.ca2*S.pp_2*S.pro_1 -P.gamma4*S.pp_2 +P.cd2*S.prooff_1;
 	  dS->ppp_1    = 0;
 	  dS->ppp_2    = 0;
 	  dS->pppp_1    = 0;
@@ -148,45 +151,45 @@ void derivatives(int model, int n, Params P, State S, State *dS)
 	}
       if(n == 3)
 	{
-	  //           translate     dimer         dedimer    degrade    trimer       detrimer
-	  dS->p_1     = P.lambda3*S.rna_1-2*P.ca1*S.p_1*S.p_1+2*P.cd1*S.pp_1-P.gamma3*S.p_1-P.ca1*S.p_1*S.pp_1+P.cd1*S.ppp_1;
-	  dS->p_2     = P.lambda3*S.rna_2-2*P.ca1*S.p_2*S.p_2+2*P.cd1*S.pp_2-P.gamma3*S.p_2-P.ca1*S.p_2*S.pp_2+P.cd1*S.ppp_2;
-	  //           DNAunbind    DNAbind
-	  dS->pro_1   = P.cd2*S.prooff_1-P.ca2*S.pro_1*S.ppp_2;            
-	  dS->pro_2   = P.cd2*S.prooff_2-P.ca2*S.pro_2*S.ppp_1;
-	  //             DNAunbind    DNAbind
-	  dS->prooff_1 = -P.cd2*S.prooff_1+P.ca2*S.pro_1*S.ppp_2;
-	  dS->prooff_2 = -P.cd2*S.prooff_2+P.ca2*S.pro_2*S.ppp_1;
-	  //           dimer       dedimer  degrade     trimer       detrimer
-	  dS->pp_1    = P.ca1*S.p_1*S.p_1-P.cd1*S.pp_1-P.gamma4*S.pp_1-P.ca1*S.p_1*S.pp_1+P.cd1*S.ppp_1;
-	  dS->pp_2    = P.ca1*S.p_2*S.p_2-P.cd1*S.pp_2-P.gamma4*S.pp_2-P.ca1*S.p_2*S.pp_2+P.cd1*S.ppp_2;
-	  //            trimer       detrimer  DNAunbind       degrade      DNAbind      
-	  dS->ppp_1    = P.ca1*S.pp_1*S.p_1-P.cd1*S.ppp_1-P.ca2*S.ppp_1*S.pro_2-P.gamma4*S.ppp_1+P.cd2*S.prooff_2;
-	  dS->ppp_2    = P.ca1*S.pp_2*S.p_2-P.cd1*S.ppp_2-P.ca2*S.ppp_2*S.pro_1-P.gamma4*S.ppp_2+P.cd2*S.prooff_1;
+	  //           translate          dimer                dedimer         degrade         trimer              detrimer
+	  dS->p_1     = P.lambda3*S.rna_1 -2*P.ca1*S.p_1*S.p_1 +2*P.cd1*S.pp_1 -P.gamma3*S.p_1 -P.ca1*S.p_1*S.pp_1 +P.cd1*S.ppp_1;
+	  dS->p_2     = P.lambda3*S.rna_2 -2*P.ca1*S.p_2*S.p_2 +2*P.cd1*S.pp_2 -P.gamma3*S.p_2 -P.ca1*S.p_2*S.pp_2 +P.cd1*S.ppp_2;
+	  //           DNAunbind         DNAbind
+	  dS->pro_1   = P.cd2*S.prooff_1 -P.ca2*S.pro_1*S.ppp_2;            
+	  dS->pro_2   = P.cd2*S.prooff_2 -P.ca2*S.pro_2*S.ppp_1;
+	  //             DNAunbind         DNAbind
+	  dS->prooff_1 = -P.cd2*S.prooff_1 +P.ca2*S.pro_1*S.ppp_2;
+	  dS->prooff_2 = -P.cd2*S.prooff_2 +P.ca2*S.pro_2*S.ppp_1;
+	  //           dimer              dedimer       degrade          trimer              detrimer
+	  dS->pp_1    = P.ca1*S.p_1*S.p_1 -P.cd1*S.pp_1 -P.gamma4*S.pp_1 -P.ca1*S.p_1*S.pp_1 +P.cd1*S.ppp_1;
+	  dS->pp_2    = P.ca1*S.p_2*S.p_2 -P.cd1*S.pp_2 -P.gamma4*S.pp_2 -P.ca1*S.p_2*S.pp_2 +P.cd1*S.ppp_2;
+	  //            trimer              detrimer       DNAunbind              degrade           DNAbind      
+	  dS->ppp_1    = P.ca1*S.pp_1*S.p_1 -P.cd1*S.ppp_1 -P.ca2*S.ppp_1*S.pro_2 -P.gamma4*S.ppp_1 +P.cd2*S.prooff_2;
+	  dS->ppp_2    = P.ca1*S.pp_2*S.p_2 -P.cd1*S.ppp_2 -P.ca2*S.ppp_2*S.pro_1 -P.gamma4*S.ppp_2 +P.cd2*S.prooff_1;
 	  dS->pppp_1    = 0;
 	  dS->pppp_2    = 0;
 
 	}
       if(n == 4)
 	{
-	  //           translate     dimer         dedimer    degrade    trimer       detrimer  tetramer      detetramer
-	  dS->p_1     = P.lambda3*S.rna_1-2*P.ca1*S.p_1*S.p_1+2*P.cd1*S.pp_1-P.gamma3*S.p_1-P.ca1*S.p_1*S.pp_1+P.cd1*S.ppp_1-P.ca1*S.p_1*S.ppp_1+P.cd1*S.pppp_1;
-	  dS->p_2     = P.lambda3*S.rna_2-2*P.ca1*S.p_2*S.p_2+2*P.cd1*S.pp_2-P.gamma3*S.p_2-P.ca1*S.p_2*S.pp_2+P.cd1*S.ppp_2-P.ca1*S.p_2*S.ppp_2+P.cd1*S.pppp_2;
-	  //           DNAunbind    DNAbind
-	  dS->pro_1   = P.cd2*S.prooff_1-P.ca2*S.pro_1*S.pppp_2;            
-	  dS->pro_2   = P.cd2*S.prooff_2-P.ca2*S.pro_2*S.pppp_1;
-	  //             DNAunbind    DNAbind
-	  dS->prooff_1 = -P.cd2*S.prooff_1+P.ca2*S.pro_1*S.pppp_2;
-	  dS->prooff_2 = -P.cd2*S.prooff_2+P.ca2*S.pro_2*S.pppp_1;
-	  //           dimer       dedimer  degrade     trimer       detrimer
-	  dS->pp_1    = P.ca1*S.p_1*S.p_1-P.cd1*S.pp_1-P.gamma4*S.pp_1-P.ca1*S.p_1*S.pp_1+P.cd1*S.ppp_1;
-	  dS->pp_2    = P.ca1*S.p_2*S.p_2-P.cd1*S.pp_2-P.gamma4*S.pp_2-P.ca1*S.p_2*S.pp_2+P.cd1*S.ppp_2;
-	  //            trimer       detrimer  degrade      tetramer      detetramer
-	  dS->ppp_1    = P.ca1*S.pp_1*S.p_1-P.cd1*S.ppp_1-P.gamma4*S.ppp_1-P.ca1*S.ppp_1*S.p_1+P.cd1*S.pppp_2;
-	  dS->ppp_2    = P.ca1*S.pp_2*S.p_2-P.cd1*S.ppp_2-P.gamma4*S.ppp_2-P.ca1*S.ppp_2*S.p_2+P.cd1*S.pppp_2;
-	  //             tetramer      detetramer DNAbind          degrade       DNAunbind
-	  dS->pppp_1    = P.ca1*S.ppp_1*S.p_1-P.cd1*S.pppp_1-P.ca2*S.pppp_1*S.pro_2-P.gamma4*S.pppp_1+P.cd2*S.prooff_2;
-	  dS->pppp_2    = P.ca1*S.ppp_2*S.p_2-P.cd1*S.pppp_2-P.ca2*S.pppp_2*S.pro_1-P.gamma4*S.pppp_2+P.cd2*S.prooff_1;
+	  //           translate          dimer                dedimer         degrade         trimer              detrimer       tetramer             detetramer
+	  dS->p_1     = P.lambda3*S.rna_1 -2*P.ca1*S.p_1*S.p_1 +2*P.cd1*S.pp_1 -P.gamma3*S.p_1 -P.ca1*S.p_1*S.pp_1 +P.cd1*S.ppp_1 -P.ca1*S.p_1*S.ppp_1 +P.cd1*S.pppp_1;
+	  dS->p_2     = P.lambda3*S.rna_2 -2*P.ca1*S.p_2*S.p_2 +2*P.cd1*S.pp_2 -P.gamma3*S.p_2 -P.ca1*S.p_2*S.pp_2 +P.cd1*S.ppp_2 -P.ca1*S.p_2*S.ppp_2 +P.cd1*S.pppp_2;
+	  //           DNAunbind         DNAbind
+	  dS->pro_1   = P.cd2*S.prooff_1 -P.ca2*S.pro_1*S.pppp_2;            
+	  dS->pro_2   = P.cd2*S.prooff_2 -P.ca2*S.pro_2*S.pppp_1;
+	  //             DNAunbind         DNAbind
+	  dS->prooff_1 = -P.cd2*S.prooff_1 +P.ca2*S.pro_1*S.pppp_2;
+	  dS->prooff_2 = -P.cd2*S.prooff_2 +P.ca2*S.pro_2*S.pppp_1;
+	  //            dimer             dedimer       degrade          trimer              detrimer
+	  dS->pp_1    = P.ca1*S.p_1*S.p_1 -P.cd1*S.pp_1 -P.gamma4*S.pp_1 -P.ca1*S.p_1*S.pp_1 +P.cd1*S.ppp_1;
+	  dS->pp_2    = P.ca1*S.p_2*S.p_2 -P.cd1*S.pp_2 -P.gamma4*S.pp_2 -P.ca1*S.p_2*S.pp_2 +P.cd1*S.ppp_2;
+	  //             trimer             detrimer       degrade           tetramer             detetramer
+	  dS->ppp_1    = P.ca1*S.pp_1*S.p_1 -P.cd1*S.ppp_1 -P.gamma4*S.ppp_1 -P.ca1*S.ppp_1*S.p_1 +P.cd1*S.pppp_2;
+	  dS->ppp_2    = P.ca1*S.pp_2*S.p_2 -P.cd1*S.ppp_2 -P.gamma4*S.ppp_2 -P.ca1*S.ppp_2*S.p_2 +P.cd1*S.pppp_2;
+	  //             tetramer             detetramer      DNAbind                 degrade            DNAunbind
+	  dS->pppp_1    = P.ca1*S.ppp_1*S.p_1 -P.cd1*S.pppp_1 -P.ca2*S.pppp_1*S.pro_2 -P.gamma4*S.pppp_1 +P.cd2*S.prooff_2;
+	  dS->pppp_2    = P.ca1*S.ppp_2*S.p_2 -P.cd1*S.pppp_2 -P.ca2*S.pppp_2*S.pro_1 -P.gamma4*S.pppp_2 +P.cd2*S.prooff_1;
 	}
     }
   
@@ -198,20 +201,25 @@ void derivatives(int model, int n, Params P, State S, State *dS)
       double ca3 = P.ca2;
       double cd3 = P.cd2;
 
-      dS->p_1     = P.lambda3*S.rna_1-2*P.ca1*S.p_1*S.p_1+2*P.cd1*S.pp_1-P.gamma3*S.p_1   + cd3*S.propoff_2-ca3*S.pro_2*S.p_1+cd1p*S.prooff_2-ca1p*S.propoff_2*S.p_1;
-      dS->p_2     = P.lambda3*S.rna_2-2*P.ca1*S.p_2*S.p_2+2*P.cd1*S.pp_2-P.gamma3*S.p_2   + cd3*S.propoff_1-ca3*S.pro_1*S.p_2+cd1p*S.prooff_1-ca1p*S.propoff_1*S.p_2;
-      //           DNAunbind    DNAbind           DNA unbind m  DNA bind m
-      dS->pro_1   = P.cd2*S.prooff_1-P.ca2*S.pro_1*S.pp_2  + cd3*S.propoff_1-ca3*S.pro_1*S.p_2;            
-      dS->pro_2   = P.cd2*S.prooff_2-P.ca2*S.pro_2*S.pp_1  + cd3*S.propoff_2-ca3*S.pro_2*S.p_1;
-      //             DNAunbind    DNAbind           DNA dimer          DNA dedimer
-      dS->prooff_1 = -P.cd2*S.prooff_1+P.ca2*S.pro_1*S.pp_2  + ca1p*S.propoff_1*S.p_2-cd1p*S.prooff_1;
-      dS->prooff_2 = -P.cd2*S.prooff_2+P.ca2*S.pro_2*S.pp_1  + ca1p*S.propoff_2*S.p_1-cd1p*S.prooff_2;
-      //             DNA bind m    DNA unbind m  DNA dedimer   DNA dimer
-      dS->propoff_1 = ca3*S.pro_1*S.p_2-cd3*S.propoff_1+cd1p*S.prooff_1-ca1p*S.propoff_1*S.p_2;
-      dS->propoff_2 = ca3*S.pro_2*S.p_1-cd3*S.propoff_2+cd1p*S.prooff_2-ca1p*S.propoff_2*S.p_1;			      
-      //           dimer       dedimer  DNAbind        degrade     DNAunbind
-      dS->pp_1    = P.ca1*S.p_1*S.p_1-P.cd1*S.pp_1-P.ca2*S.pp_1*S.pro_2-P.gamma4*S.pp_1+P.cd2*S.prooff_2;
-      dS->pp_2    = P.ca1*S.p_2*S.p_2-P.cd1*S.pp_2-P.ca2*S.pp_2*S.pro_1-P.gamma4*S.pp_2+P.cd2*S.prooff_1;
+      //           unbound                 degradation         monomer bound
+      dS->rna_1  = P.lambda2*S.pro_1*S.z_1 -P.gamma2*S.rna_1   +lambda2p*S.propoff_1*S.z_1;
+      dS->rna_2  = P.lambda2*S.pro_2*S.z_2 -P.gamma2*S.rna_2   +lambda2p*S.propoff_2*S.z_1;
+		  
+      //            translate         dimer                dedimer         degrade            DNA unbind m    DNA bind m         DNA dedimer      DNA dimer 
+      dS->p_1     = P.lambda3*S.rna_1 -2*P.ca1*S.p_1*S.p_1 +2*P.cd1*S.pp_1 -P.gamma3*S.p_1   +cd3*S.propoff_2 -ca3*S.pro_2*S.p_1 +cd1p*S.prooff_2 -ca1p*S.propoff_2*S.p_1;
+      dS->p_2     = P.lambda3*S.rna_2 -2*P.ca1*S.p_2*S.p_2 +2*P.cd1*S.pp_2 -P.gamma3*S.p_2   +cd3*S.propoff_1 -ca3*S.pro_1*S.p_2 +cd1p*S.prooff_1 -ca1p*S.propoff_1*S.p_2;
+      //            DNAunbind        DNAbind                DNA unbind m     DNA bind m
+      dS->pro_1   = P.cd2*S.prooff_1 -P.ca2*S.pro_1*S.pp_2  +cd3*S.propoff_1 -ca3*S.pro_1*S.p_2;            
+      dS->pro_2   = P.cd2*S.prooff_2 -P.ca2*S.pro_2*S.pp_1  +cd3*S.propoff_2 -ca3*S.pro_2*S.p_1;
+      //             DNAunbind         DNAbind                DNA dimer               DNA dedimer
+      dS->prooff_1 = -P.cd2*S.prooff_1 +P.ca2*S.pro_1*S.pp_2  +ca1p*S.propoff_1*S.p_2 -cd1p*S.prooff_1;
+      dS->prooff_2 = -P.cd2*S.prooff_2 +P.ca2*S.pro_2*S.pp_1  +ca1p*S.propoff_2*S.p_1 -cd1p*S.prooff_2;
+      //              DNA bind m        DNA unbind m     DNA dedimer      DNA dimer
+      dS->propoff_1 = ca3*S.pro_1*S.p_2 -cd3*S.propoff_1 +cd1p*S.prooff_1 -ca1p*S.propoff_1*S.p_2;
+      dS->propoff_2 = ca3*S.pro_2*S.p_1 -cd3*S.propoff_2 +cd1p*S.prooff_2 -ca1p*S.propoff_2*S.p_1;			      
+      //            dimer             dedimer       DNAbind               degrade          DNAunbind
+      dS->pp_1    = P.ca1*S.p_1*S.p_1 -P.cd1*S.pp_1 -P.ca2*S.pp_1*S.pro_2 -P.gamma4*S.pp_1 +P.cd2*S.prooff_2;
+      dS->pp_2    = P.ca1*S.p_2*S.p_2 -P.cd1*S.pp_2 -P.ca2*S.pp_2*S.pro_1 -P.gamma4*S.pp_2 +P.cd2*S.prooff_1;
       dS->ppp_1    = 0;
       dS->ppp_2    = 0;
       dS->pppp_1    = 0;
@@ -458,7 +466,7 @@ int main(int argc, char *argv[])
   
       n = 2;
 
-      for(ICs = 0; ICs <= 4; ICs++)
+      for(ICs = 0; ICs <= 3; ICs++)
 	{
 	  for(P.ATP = 0.5; P.ATP <= 2.1; P.ATP *= 2)
 	    {
