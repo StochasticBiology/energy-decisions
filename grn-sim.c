@@ -236,7 +236,7 @@ void initialState(State *S, double ip1, double ip2, int ICs)
 {
   S->p_1 = ip1; S->p_2 = ip2;
   S->pro_1 = 1; S->pro_2 = 1; S->z_1 = 1; S->z_2 = 1;
-  S->rna_1 = S->rna_2 = S->prooff_1 = S->prooff_2 = S->pp_1 = S->pp_2 = S->ppp_1 = S->ppp_2 = S->pppp_1 = S->pppp_2 = 0;
+  S->rna_1 = S->rna_2 = S->prooff_1 = S->prooff_2 = S->propoff_1 = S->propoff_2 = S->pp_1 = S->pp_2 = S->ppp_1 = S->ppp_2 = S->pppp_1 = S->pppp_2 = 0;
 
   switch(ICs) {
   case 0: break;
