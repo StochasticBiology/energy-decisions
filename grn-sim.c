@@ -466,13 +466,14 @@ int main(int argc, char *argv[])
   
       n = 2;
       P.gamma3 *= 10;
+      dt = 0.005;
       
       for(ICs = 0; ICs <= 3; ICs++)
 	{
 	  for(P.ATP = 0.5; P.ATP <= 2.1; P.ATP *= 2)
 	    {
 	      P.lambda2 *= P.ATP; P.lambda3 *= P.ATP;
-	      simulate(P, 1, 1, n, ICs, "grn-sim-5.csv", "", 0, 0.01);
+	      simulate(P, 1, 1, n, ICs, "grn-sim-5.csv", "", 0, dt);
 	      P.lambda2 /= P.ATP; P.lambda3 /= P.ATP;
 	    }
 	}
@@ -521,12 +522,12 @@ int main(int argc, char *argv[])
       for(P.ATP = 0.1; P.ATP <= 2; P.ATP += 0.1)
 	{
 	  P.lambda2 *= P.ATP; P.lambda3 *= P.ATP;
-	  P.gamma3 *= 4;
+	  P.gamma3 *= 10;
 	  simulate(P, 1, 1, n, 0, "grn-sim-7.csv", "", 0, dt);
-	  P.gamma3 /= 4;
-	  P.cd2 /= 4;
+	  P.gamma3 /= 10;
+	  P.cd2 /= 50;
 	  simulate(P, 1, 1, n, 0, "grn-sim-7.csv", "", 0, dt);
-	  P.cd2 *= 4;
+	  P.cd2 *= 50;
 	  P.lambda2 /= P.ATP; P.lambda3 /= P.ATP;
 	}
     }
