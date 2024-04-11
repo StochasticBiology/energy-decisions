@@ -430,7 +430,7 @@ int main(int argc, char *argv[])
 	      //if(expt == 2 && P.param == 7 && P.scale == 4) dt = 0.0001;
 	      //if(expt == 2 && P.param == 8 && P.scale == 4) dt = 0.0001;
 
-	      if(expt == 1) simulate(P, 1, 1, n, 0, fname, "", 0, dt);
+	      if(expt == 1 && !(n==1 && P.param == 4 && P.scale == 4)) simulate(P, 1, 1, n, 0, fname, "", 0, dt);
 	      else simulate(P, 2, 1, n, 0, fname, "", 0, dt);
 			  
 	    }
