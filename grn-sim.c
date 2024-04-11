@@ -425,8 +425,10 @@ int main(int argc, char *argv[])
 		}
 		  
 	      // the particular case of 100x ca2 needs a smaller timestep for stability
-	      if(P.param == 6 && P.scale == 4) dt = 0.001;
-	      else dt = 0.01;
+	      dt = 0.01;
+	      if(expt == 1 && P.param == 6 && P.scale == 4) dt = 0.0001;
+	      if(expt == 2 && P.param == 7 && P.scale == 4) dt = 0.0001;
+	      if(expt == 2 && P.param == 8 && P.scale == 4) dt = 0.0001;
 
 	      if(expt == 1) simulate(P, 1, 1, n, 0, fname, "", 0, dt);
 	      else simulate(P, 2, 1, n, 0, fname, "", 0, dt);
@@ -639,6 +641,30 @@ int main(int argc, char *argv[])
 	    }
 	}
     }
+
+  // finding suitable timestep for problem cases
+  if(expt == 9)
+    {
+      n = 2;
+      // 0.0001 works with euler
+      // 0.001 doesn't work with RK4
+      dt = 0.0001;
       
+      sprintf(fname, "grn-sim-9.csv");
+      initialiseFile(fname, 0);
+
+      P.ca2 *= 100;
+      simulate(P, 1, 1, n, 0, fname, "", 0, dt);
+      P.ca2 /= 100;
+
+      P.lambda2 *= 100;
+      simulate(P, 2, 1, n, 0, fname, "", 0, dt);
+      P.lambda2 /= 100;
+
+      P.lambda3 *= 100;
+      simulate(P, 2, 1, n, 0, fname, "", 0, dt);
+      P.lambda3 /= 100;
+    }
+  
   return 0;
 }
