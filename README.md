@@ -15,7 +15,7 @@ The simulation code here explores the behaviour of deterministic (ODE) and stoch
   * 7 -- bifurcation plots
   * 8 -- pairwise parameter influences (takes another parameter 0-7 specifying the pair of scalings to apply to the two parameters)
 
-
+Split across cores, this code should take at most a few hours to run.
 
 `stoch.c` simulates a stochastic version of the system using the Gillespie algorithm.
 
