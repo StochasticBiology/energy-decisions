@@ -426,9 +426,9 @@ int main(int argc, char *argv[])
 		  
 	      // the particular case of 100x ca2 needs a smaller timestep for stability
 	      dt = 0.01;
-	      if(expt == 1 && P.param == 6 && P.scale == 4) dt = 0.0001;
-	      if(expt == 2 && P.param == 7 && P.scale == 4) dt = 0.0001;
-	      if(expt == 2 && P.param == 8 && P.scale == 4) dt = 0.0001;
+	      if(expt == 1 && n == 2 && P.param == 6 && P.scale == 4) dt = 0.0001;
+	      //if(expt == 2 && P.param == 7 && P.scale == 4) dt = 0.0001;
+	      //if(expt == 2 && P.param == 8 && P.scale == 4) dt = 0.0001;
 
 	      if(expt == 1) simulate(P, 1, 1, n, 0, fname, "", 0, dt);
 	      else simulate(P, 2, 1, n, 0, fname, "", 0, dt);
@@ -469,8 +469,8 @@ int main(int argc, char *argv[])
 	  for(P.ATP = 0.25; P.ATP <= 2.1; P.ATP *= 2)
 	    {
 	      // some cases need a smaller timestep for stability
-	      if(P.ATP > 2 || P.cd2 > 0.02) dt = 0.005;
-	      else dt = 0.01;
+	      dt = 0.01;
+	      if(P.ATP > 1.9 || P.cd2 > 0.02) dt = 0.005;
 	      
 	      P.lambda2 *= P.ATP; P.lambda3 *= P.ATP;
 	      if(expt == 3) simulate(P, 1, 1, n, 0, "grn-sim-3.csv", "", 0, dt);
@@ -612,6 +612,15 @@ int main(int argc, char *argv[])
 		case 8: P.lambda3 *= s2; break;
 		}
 
+	      dt = 0.01;
+	      // specific cases needing smaller timesteps for stability
+	      if(P.scale == 4 && P.param == 2 && (P.param2 == 5 || P.param2 == 4)) dt = 0.001;
+	      if(P.scale == 5 && P.param == 1 && P.param2 == 2) dt = 0.001;
+	      if(P.scale == 6 && ( (P.param2 == 6 && (P.param == 2 || P.param == 4 || P.param == 5) ||
+				    (P.param2 == 3 && P.param == 4)) ) ) dt = 0.001;
+	      if(P.scale == 7 && ( (P.param == 1 && (P.param2 == 6 || P.param2 == 7 || P.param2 == 8) ||
+				    (P.param == 3 && P.param2 == 6)) ) ) dt = 0.001;
+		 
 	      simulate(P, 1, 1, n, 0, "grn-sim-8.csv", "", 0, dt);
 	      switch(P.param)
 		{
@@ -642,12 +651,12 @@ int main(int argc, char *argv[])
 	}
     }
 
-  // finding suitable timestep for problem cases
+  // not included in manuscript: empirical investigation finding suitable timestep for problem cases
   if(expt == 9)
     {
       n = 2;
       // 0.0001 works with euler
-      // 0.001 doesn't work with RK4
+      // 0.001 doesn't work with RK4, so no real gain from other solver
       dt = 0.0001;
       
       sprintf(fname, "grn-sim-9.csv");

@@ -113,7 +113,7 @@ g.6a = ggplot(df.6a, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_s
 g.6b = ggplot(df.6b, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
   theme(legend.position="none") + facet_grid(ATP ~ gamma3) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
 g.6c = ggplot(df.6c, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
-  theme(legend.position="none") + facet_grid(ATP ~ gamma3) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
+  theme(legend.position="none") + facet_grid(ATP ~ gamma3/ATP) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
 
 png("expt-6.png", width=900*sf, height=300*sf, res=72*sf)
 print( ggarrange(g.6a, g.6b, g.6c, nrow=1, ncol=3, labels=c("A", "B", "C")) )
@@ -165,11 +165,20 @@ g.8.2.4 = ggplot(df.8[df.8$scale==7,], aes(x=ip1,y=ip2,xend=p1,yend=p2,color=fac
   facet_grid(param.labels[param+1] ~ param.labels[param2+1]) + coord_cartesian(xlim = c(0,30), ylim = c(0,30)) + theme(legend.position="none")
 
 png("expt-8.1.png", width=1200*sf, height=900*sf, res=72*sf)
-print( ggarrange(g.8.1.1, g.8.1.2, g.8.1.3, g.8.1.4, labels=c("A", "B", "C", "D")) )
+print( ggarrange(g.8.1.1, g.8.1.2, g.8.1.3, g.8.1.4, labels=c("A. 0.5,0.5", "B. 2,0.5", "C. 0.5,2" , "D. 2,2")) )
 dev.off()
 
 png("expt-8.2.png", width=1200*sf, height=900*sf, res=72*sf)
-print( ggarrange(g.8.2.1, g.8.2.2, g.8.2.3, g.8.2.4, labels=c("A", "B", "C", "D")) )
+print( ggarrange(g.8.2.1, g.8.2.2, g.8.2.3, g.8.2.4, labels=c("A. 0.1,0.1", "B. 10,0.1", "C. 0.1,10", "D. 10,10")) )
 dev.off()
 
+############ (quasi-)Experiment 9 -- finding timestep for awkward cases
+### not included in manuscript
+
+df.9 = read.csv("grn-sim-9.csv")
+df.9$label = df.9$lambda2+2*df.9$lambda3+df.9$ca2
+g.9 = ggplot(df.9, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
+  theme(legend.position="none") + facet_wrap(~label) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
+
+g.9
 
