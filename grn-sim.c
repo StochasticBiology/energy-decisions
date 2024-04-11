@@ -113,7 +113,9 @@ void derivatives(int model, int n, Params P, State S, State *dS)
       //            transcribe              degrade
       dS->rna_1   = P.lambda2*S.pro_1*S.z_1 -P.gamma2*S.rna_1;
       dS->rna_2   = P.lambda2*S.pro_2*S.z_2 -P.gamma2*S.rna_2;
-
+      dS->propoff_1 = 0;
+      dS->propoff_2 = 0;
+      
       if(n == 1)
 	{
 	  //           translate          degrade         DNAbind              DNAunbind
@@ -424,7 +426,7 @@ int main(int argc, char *argv[])
 		  
 	      // the particular case of 100x ca2 needs a smaller timestep for stability
 	      if(P.param == 6 && P.scale == 4) dt = 0.001;
-	      else dt = 0.005;
+	      else dt = 0.01;
 
 	      if(expt == 1) simulate(P, 1, 1, n, 0, fname, "", 0, dt);
 	      else simulate(P, 2, 1, n, 0, fname, "", 0, dt);
@@ -488,7 +490,7 @@ int main(int argc, char *argv[])
       
       for(ICs = 0; ICs <= 3; ICs++)
 	{
-	  for(P.ATP = 0.5; P.ATP <= 2.1; P.ATP *= 2)
+      	  for(P.ATP = 0.5; P.ATP <= 2.1; P.ATP *= 2)
 	    {
 	      P.lambda2 *= P.ATP; P.lambda3 *= P.ATP;
 	      simulate(P, 1, 1, n, ICs, "grn-sim-5.csv", "", 0, dt);
