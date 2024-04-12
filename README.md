@@ -15,13 +15,13 @@ The simulation code here explores the behaviour of deterministic (ODE) and stoch
   * 7 -- bifurcation plots
   * 8 -- pairwise parameter influences (takes another parameter 0-7 specifying the pair of scalings to apply to the two parameters)
 
-Split across cores, this code should take at most a few hours to run.
+Split across cores, this ODE code should take at most a few hours to run. Experiment 1 will take a bit longer because one parameter set needs a rather smaller timestep for stability.
+
+All the above produce CSV files describing the time behaviour of system state (protein levels, RNA levels, and so on). `grn-sim-plot.R` visualises these.
 
 `stoch.c` simulates a stochastic version of the system using the Gillespie algorithm.
 
 `stoch-scan.c` runs this stochastic version for the parameter sets in `param-scan.c`.
-
-All the above produce CSV files describing the time behaviour of system state (protein levels, RNA levels, and so on). `grn-sim-plot.R` visualises these.
 
 `hill.c` runs a simple simulation exploring the effects of different required oligomerisation states of a regulatory factor. `plot-hill.R` visualises the results for qualitative comparison with Hill function modelling.
  
