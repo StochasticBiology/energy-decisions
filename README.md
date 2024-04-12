@@ -23,5 +23,7 @@ All the above produce CSV files describing the time behaviour of system state (p
 
 `stoch-scan.c` runs this stochastic version for the parameter sets in `param-scan.c`.
 
+These are plotted in the `plot-vis...R` scripts.
+
 `hill.c` runs a simple simulation exploring the effects of different required oligomerisation states of a regulatory factor. `plot-hill.R` visualises the results for qualitative comparison with Hill function modelling.
  
