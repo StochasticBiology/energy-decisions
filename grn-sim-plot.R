@@ -79,7 +79,7 @@ df.3 = read.csv("grn-sim-3.csv")
 g.3 = ggplot(df.3, aes(x=ip1,y=ip2,xend=p1,yend=p2,color=factor(p1))) + geom_segment() +
   theme(legend.position="none") + facet_grid(ATP ~ gamma3) + coord_cartesian(xlim = c(0,30), ylim = c(0,30))
 
-############ Experiment 4 -- ATP x gamma3 influence
+############ Experiment 4 -- ATP x cd2 influence
 ### manuscript: Fig 3B
 
 df.4 = read.csv("grn-sim-4.csv")
@@ -138,6 +138,12 @@ g.7.2 = ggplot(sub.7.2, aes(x=ATP, y=p1)) + geom_point()
 
 png("expt-7.png", width=600*sf, height=300*sf, res=72*sf)
 print( ggarrange(g.7.1, g.7.2, labels=c("A", "B")) )
+dev.off()
+
+png("expts-3-4-7.png", width=900*sf, height=600*sf, res=72*sf)
+#print( ggarrange(g.3, g.4, ggarrange(g.7.1, g.7.2, labels=c("C", "D"), nrow=2), nrow=1, labels=c("A", "B", "") ) )
+print(ggarrange( ggarrange(g.3, g.7.1, widths=c(2,1), labels=c("A", "B"), nrow=1),
+       ggarrange(g.4, g.7.2, widths=c(2,1), labels=c("C", "D"), nrow=1), nrow=2 ) )
 dev.off()
 
 ############ Experiment 8 -- matrices of pairwise changes

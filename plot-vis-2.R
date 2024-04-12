@@ -3,7 +3,9 @@ library(ggplot2)
 library(ggpubr)
 
 param.names = c("gamma2", "gamma3", "gamma4", "cd1", "cd2", "ca1", "ca2", "lambda2", "lambda3")
+param.names = factor(param.names, levels=param.names)
 scale.names = c("x0.01", "x0.1", "x1", "x10", "x100")
+scale.names = factor(scale.names, levels=scale.names)
 
 # read in time series from gillespie simulation set
 df = data.frame()

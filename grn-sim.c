@@ -427,8 +427,8 @@ int main(int argc, char *argv[])
 	      // the particular case of 100x ca2 needs a smaller timestep for stability
 	      dt = 0.01;
 	      if(expt == 1 && n == 2 && P.param == 6 && P.scale == 4) dt = 0.0001;
-	      //if(expt == 2 && P.param == 7 && P.scale == 4) dt = 0.0001;
-	      //if(expt == 2 && P.param == 8 && P.scale == 4) dt = 0.0001;
+	      if(expt == 2 && P.param == 7 && P.scale == 4) dt = 0.001;
+	      if(expt == 2 && P.param == 8 && P.scale == 4) dt = 0.001;
 
 	      if(expt == 1 && !(n==1 && P.param == 4 && P.scale == 4)) simulate(P, 1, 1, n, 0, fname, "", 0, dt);
 	      else if(expt == 2 && !(n==2 && (P.param == 4 || P.param == 6) && P.scale == 4)) simulate(P, 2, 1, n, 0, fname, "", 0, dt);
